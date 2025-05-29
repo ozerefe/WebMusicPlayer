@@ -1,0 +1,401 @@
+<!-- Özer Efe Engin 20210702033 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Current Music: <?php echo htmlspecialchars($songName); ?></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #121212;
+            --text-color: #f5f5f5;
+            --bg-color: #181818;
+            --card-color: #282828;
+            --hover-color: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: var(--card-color);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(25, 20, 20, 0.3));
+            border-radius: 12px;
+        }
+        
+        .header img {
+            width: 150px;
+            height: 150px;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-right: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .details {
+            flex: 1;
+        }
+        
+        .details h1 {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .details p {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .details a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .details a:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+        
+        .playlist-section {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        
+        .playlist-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .playlist-section form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .success-message {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border-left: 4px solid #2ecc71;
+        }
+        
+        .error-message {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .warning-message {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: #f39c12;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .follow-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .follow-button:hover {
+            background-color: #2980b9;
+        }
+        
+        .home-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .home-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        select {
+            width: 70%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            margin-right: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        button {
+            padding: 10px 18px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .progress-container {
+            margin-top: 25px;
+        }
+        
+        .progress-bar-bg {
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: var(--primary-color);
+            transition: width 1s linear;
+        }
+        
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+    </style>
+</head>
+<body>
+<a href="homepage.php" class="home-button">🏠 Home</a>
+
+<div class="container">
+<?php
+if ($result && $result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    ?>
+
+    <div class="header">
+        <img src="<?php echo htmlspecialchars($row['song_image'] ?: $row['album_image']); ?>" alt="Song or Album Image">
+        <div class="details">
+            <h1>🎵 <?php echo htmlspecialchars($row['song_title']); ?></h1>
+            <p><strong>Artist:</strong> <a href='artistpage.php?name=<?php echo urlencode($row['artist_name']); ?>'><?php echo htmlspecialchars($row['artist_name']); ?></a></p>
+            <p><strong>Album:</strong> <a href='albumpage.php?name=<?php echo urlencode($row['album_title']); ?>'><?php echo htmlspecialchars($row['album_title']); ?></a></p>
+            <p><strong>Duration:</strong> <?php echo gmdate("i:s", $row['duration']); ?> minutes</p>
+            
+            <!-- Add to Playlist Form -->
+            <div class="playlist-section">
+                <h4>Add to Playlist</h4>
+                <?php
+                // Get user playlists - If not logged in, show first user's playlists by default
+                $activeUserId = isset($_SESSION['username']) ? $userId : 1; // If not logged in, use user with ID=1
+                
+                $userPlaylistsQuery = "SELECT playlist_id, title FROM PLAYLISTS WHERE user_id = $activeUserId";
+                $playlistsResult = $conn->query($userPlaylistsQuery);
+                
+                if ($playlistsResult && $playlistsResult->num_rows > 0) {
+                    // POST add to playlist process
+                    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['playlist_id'])) {
+                        $playlistId = intval($_POST['playlist_id']);
+                        $songId = $row['song_id'];
+                        
+                        // Check if song is already in this playlist
+                        $checkQuery = "SELECT * FROM PLAYLIST_SONGS WHERE playlist_id = $playlistId AND song_id = $songId";
+                        $checkResult = $conn->query($checkQuery);
+                        
+                        if ($checkResult && $checkResult->num_rows == 0) {
+                            $addQuery = "INSERT INTO PLAYLIST_SONGS (playlist_id, song_id, date_added) VALUES ($playlistId, $songId, NOW())";
+                            if ($conn->query($addQuery)) {
+                                echo "<div class='success-message'>Song added to playlist!</div>";
+                            } else {
+                                echo "<div class='error-message'>Error: " . $conn->error . "</div>";
+                            }
+                        } else {
+                            echo "<div class='warning-message'>This song is already in this playlist.</div>";
+                        }
+                    }
+                    
+                    // Playlist selection form
+                    echo "<form method='post' action=''>";
+                    echo "<select name='playlist_id'>";
+                    while ($playlist = $playlistsResult->fetch_assoc()) {
+                        echo "<option value='" . $playlist['playlist_id'] . "'>" . htmlspecialchars($playlist['title']) . "</option>";
+                    }
+                    echo "</select>";
+                    echo "<button type='submit'>Add</button>";
+                    echo "</form>";
+                } else {
+                    echo "<p><a href='add_playlist.php' class='follow-button' style='text-decoration: none; display: inline-block; margin-top: 5px;'>Create new playlist</a></p>";
+                }
+                ?>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar-bg">
+                    <div id="progressBar" class="progress-bar"></div>
+                </div>
+                <div class="time-display">
+                    <span id="currentTime">00:00</span>
+                    <span><?php echo gmdate("i:s", $row['duration']); ?></span>
+                </div>
+                <button onclick="togglePlay()" id="playBtn">▶️ Start</button>
+            </div>
+
+            <script>
+            let duration = <?php echo $row['duration']; ?>;
+            let currentTime = 0;
+            let playing = false;
+            let interval;
+            let songId = <?php echo $row['song_id'] ?? 0; ?>;
+            let songAdded = false;
+
+            function togglePlay() {
+                if (!playing) {
+                    interval = setInterval(updateProgress, 1000);
+                    document.getElementById('playBtn').innerText = '⏸️ Pause';
+                    playing = true;
+                    
+                    // Add to play history - only once
+                    if (!songAdded && songId > 0) {
+                        addToPlayHistory(songId);
+                        songAdded = true;
+                    }
+                } else {
+                    clearInterval(interval);
+                    document.getElementById('playBtn').innerText = '▶️ Start';
+                    playing = false;
+                }
+            }
+
+            function updateProgress() {
+                if (currentTime < duration) {
+                    currentTime++;
+                    document.getElementById('currentTime').innerText = formatTime(currentTime);
+                    document.getElementById('progressBar').style.width = (currentTime / duration * 100) + '%';
+                } else {
+                    clearInterval(interval);
+                    playing = false;
+                    document.getElementById('playBtn').innerText = '▶️ Restart';
+                    currentTime = 0;
+                }
+            }
+
+            function formatTime(sec) {
+                let min = Math.floor(sec / 60);
+                let s = sec % 60;
+                return (min < 10 ? '0' : '') + min + ':' + (s < 10 ? '0' : '') + s;
+            }
+
+            // AJAX call to add to play history
+            function addToPlayHistory(songId) {
+                const userId = <?php echo $userId; ?>;
+                if (userId > 0) {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open("POST", "add_play_history.php", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status === 200) {
+                                console.log("Added to play history: " + xhr.responseText);
+                            } else {
+                                console.error("Error adding to play history");
+                            }
+                        }
+                    };
+                    xhr.send("user_id=" + userId + "&song_id=" + songId);
+                } else {
+                    console.log("Cannot add to play history because user is not logged in");
+                }
+            }
+            </script>
+
+        </div>
+    </div>
+
+<?php
+} elseif (isset($searchResult) && $searchResult->num_rows > 0) {
+    // Show search results
+    echo "<h2>🔍 Search results for \"" . htmlspecialchars($songName) . "\":</h2>";
+    echo "<div style='display: grid; gap: 15px; margin-top: 20px;'>";
+    
+    while ($searchRow = $searchResult->fetch_assoc()) {
+        echo "<div style='background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; display: flex; align-items: center; gap: 15px;'>";
+        echo "<img src='" . htmlspecialchars($searchRow['song_image'] ?: $searchRow['album_image']) . "' style='width: 60px; height: 60px; border-radius: 8px; object-fit: cover;'>";
+        echo "<div style='flex: 1;'>";
+        echo "<h4 style='margin: 0; color: var(--primary-color);'><a href='currentmusic.php?name=" . urlencode($searchRow['song_title']) . "' style='text-decoration: none; color: inherit;'>" . htmlspecialchars($searchRow['song_title']) . "</a></h4>";
+        echo "<p style='margin: 5px 0; color: rgba(255,255,255,0.8);'>Artist: " . htmlspecialchars($searchRow['artist_name']) . "</p>";
+        echo "<p style='margin: 5px 0; color: rgba(255,255,255,0.6);'>Album: " . htmlspecialchars($searchRow['album_title']) . "</p>";
+        echo "</div>";
+        echo "<div style='color: rgba(255,255,255,0.6);'>" . gmdate("i:s", $searchRow['duration']) . "</div>";
+        echo "</div>";
+    }
+    echo "</div>";
+} else {
+    // Show search section even when no results found
+    echo "<h2>🔍 Search results for \"" . htmlspecialchars($songName) . "\":</h2>";
+    echo "<div style='display: grid; gap: 15px; margin-top: 20px;'>";
+    echo "<div style='background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; text-align: center; color: rgba(255,255,255,0.6);'>";
+    echo "<p>No results found for this search. Try different keywords.</p>";
+    echo "</div>";
+    echo "</div>";
+}
+$conn->close();
+?>
+</div>
+</body>
+</html> 

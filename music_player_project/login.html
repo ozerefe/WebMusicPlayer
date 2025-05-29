@@ -1,0 +1,91 @@
+<!-- Özer Efe Engin 20210702033 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Music Player - Login</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to bottom right, #2980b9, #020406);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 420px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .login-container h1 {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .login-container p {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 14px;
+      background-color: #1DB954; 
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .login-container button:hover {
+      background-color: #1AA34A; 
+    }
+  </style>
+  <script>
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('error')) {
+        alert("Invalid login. Please try again.");
+      }
+    };
+  </script>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Music Player</h1>
+    <p>Welcome to Ozer Efe Engin's Music Player!</p>
+    <form action="login.php" method="post">
+      <input type="text" name="username" placeholder="Username" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</body>
+</html>

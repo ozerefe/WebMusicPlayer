@@ -1,0 +1,481 @@
+<!-- Özer Efe Engin 20210702033 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Music Player - Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #121212;
+            --text-color: #f5f5f5;
+            --bg-color: #181818;
+            --card-color: #282828;
+            --hover-color: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #3498db, #191414);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .logout-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .left-panel, .right-panel {
+            background-color: var(--card-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .add-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .add-btn:hover {
+            background-color: #2980b9;
+            transform: scale(1.1);
+        }
+        
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .search-bar input:focus {
+            outline: 1px solid var(--primary-color);
+        }
+        
+        .search-bar button {
+            padding: 10px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .search-bar button:hover {
+            background-color: #2980b9;
+        }
+        
+        .scrollable {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .playlist-item:hover {
+            background-color: var(--hover-color);
+            transform: translateX(5px);
+        }
+        
+        .playlist-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        
+        .playlist-info {
+            flex: 1;
+        }
+        
+        .playlist-title {
+            font-weight: 500;
+            margin-bottom: 3px;
+            color: var(--text-color);
+        }
+        
+        .playlist-desc {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .song-item {
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .song-item:hover {
+            background-color: var(--hover-color);
+            color: var(--primary-color);
+        }
+        
+        .artist-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .artist-item:hover {
+            background-color: var(--hover-color);
+        }
+        
+        .artist-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        
+        .artist-info {
+            flex: 1;
+        }
+        
+        .artist-name {
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        
+        .artist-name a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .artist-name a:hover {
+            color: var(--primary-color);
+        }
+        
+        .artist-listeners {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 8px;
+        }
+        
+        .logout-btn {
+            padding: 8px 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-color);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .logout-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .follow-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .follow-button:hover {
+            background-color: #2980b9;
+        }
+        
+        .unfollow-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .unfollow-button:hover {
+            background-color: #c0392b;
+        }
+
+        .no-items {
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+        }
+    </style>
+    <script>
+        // Sayfa yüklendiğinde event listener'ları ekle
+        document.addEventListener('DOMContentLoaded', function() {
+            // Playlist item'ları için click event
+            const playlistItems = document.querySelectorAll('.playlist-item[data-playlist]');
+            playlistItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const playlistName = this.getAttribute('data-playlist');
+                    window.location.href = 'playlistpage.php?name=' + encodeURIComponent(playlistName);
+                });
+            });
+            
+            // Song item'ları için click event
+            const songItems = document.querySelectorAll('.song-item[data-song]');
+            songItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const songName = this.getAttribute('data-song');
+                    window.location.href = 'currentmusic.php?name=' + encodeURIComponent(songName);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+<div class="header">
+    <h1>Hello, <?php echo htmlspecialchars($name); ?></h1>
+    <div style="position: absolute; top: 20px; right: 20px;">
+        <form method="post" action="logout.php">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+    <div style="position: absolute; top: 15px; right: 130px;">
+        <a href="generalSQL.php" style="text-decoration: none;">
+            <button type="button" class="logout-btn">General SQL</button>
+        </a>
+    </div>
+</div>
+
+<div class="main-container">
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+        <div class="section-header">
+            <h3 class="section-title">Your Playlists</h3>
+            <button onclick="window.location.href='add_playlist.php'" class="add-btn">+</button>
+        </div>
+        
+        <!-- Playlist Arama -->
+        <div class="search-bar">
+            <form method="get" action="" style="display: flex; width: 100%; gap: 10px;">
+                <input type="text" name="playlist_filter" placeholder="Search Playlists..." required>
+                <button type="submit">Search</button>
+            </form>
+            <form method="get" action="" style="flex-shrink: 0;">
+                <button type="submit">Reset</button>
+            </form>
+        </div>
+
+        <!-- Scrollable playlist container -->
+        <div class="scrollable">
+        <?php
+        $userIdRes = $conn->query("SELECT user_id FROM USERS WHERE username='$user'");
+        $userId = $userIdRes->fetch_assoc()['user_id'];
+
+        $playlistFilter = "";
+        if (isset($_GET['playlist_filter'])) {
+            $filter = $conn->real_escape_string($_GET['playlist_filter']);
+            $playlistFilter = "AND title LIKE '%$filter%'";
+        }
+
+        $sql = "SELECT * FROM PLAYLISTS WHERE user_id=$userId $playlistFilter";
+        $result = $conn->query($sql);
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $title = htmlspecialchars($row['title']);
+                $desc = htmlspecialchars($row['description']);
+                $image = htmlspecialchars($row['image']);
+                echo "<div class='playlist-item' data-playlist='$title'>
+                        <img src='$image' alt='playlist image'>
+                        <div class='playlist-info'>
+                            <div class='playlist-title'>$title</div>
+                            <div class='playlist-desc'>$desc</div>
+                        </div>
+                      </div>";
+            }
+        } else {
+            echo "<p class='no-items'>No playlists found yet.</p>";
+        }
+        ?>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+        <div class="section-header">
+            <h3 class="section-title">Last 10 Played Songs</h3>
+        </div>
+        
+        <div class="search-bar">
+            <form method="get" action="" style="display: flex; width: 100%; gap: 10px;">
+                <input type="text" name="history_search" placeholder="Search  Songs..." required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        
+        <div class="scrollable">
+        <?php
+        $sql = "SELECT S.title FROM PLAY_HISTORY P JOIN SONGS S ON P.song_id = S.song_id WHERE P.user_id = $userId ORDER BY playtime DESC LIMIT 10";
+        $result = $conn->query($sql);
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $songTitle = htmlspecialchars($row['title']);
+                echo "<div class='song-item' data-song='$songTitle'>" . $songTitle . "</div>";
+            }
+        } else {
+            echo "<p class='no-items'>No play history found.</p>";
+        }
+        ?>
+        </div>
+
+        <div class="section-header" style="margin-top: 20px;">
+            <h3 class="section-title">Top 5 Artists in Your Country</h3>
+        </div>
+        
+        <div class="search-bar">
+            <form method="get" action="" style="display: flex; width: 100%; gap: 10px;">
+                <input type="text" name="artist_search" placeholder="Search Artists..." required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        
+        <?php
+        $sql = "SELECT A.name, A.listeners, A.image FROM ARTISTS A WHERE A.country_id = (SELECT country_id FROM USERS WHERE username='$user') ORDER BY A.listeners DESC LIMIT 5";
+        $result = $conn->query($sql);
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $artistName = htmlspecialchars($row['name']);
+                $listeners = htmlspecialchars($row['listeners']);
+                $image = htmlspecialchars($row['image']);
+                
+                // Bu sanatçıyı takip ediyor mu kontrol et
+                $artistIdQuery = "SELECT artist_id FROM ARTISTS WHERE name='$artistName' LIMIT 1";
+                $artistIdResult = $conn->query($artistIdQuery);
+                if ($artistIdResult && $artistIdResult->num_rows > 0) {
+                    $artistId = $artistIdResult->fetch_assoc()['artist_id'];
+                    $checkFollowQuery = "SELECT * FROM FOLLOWS WHERE user_id = $userId AND artist_id = $artistId";
+                    $checkFollowResult = $conn->query($checkFollowQuery);
+                    $isFollowing = ($checkFollowResult && $checkFollowResult->num_rows > 0);
+                } else {
+                    $isFollowing = false;
+                }
+                
+                echo "<div class='artist-item'>
+                        <img src='".$image."' alt='".$artistName."' class='artist-img'>
+                        <div class='artist-info'>
+                            <div class='artist-name'><a href='artistpage.php?name=".urlencode($artistName)."'>".$artistName."</a></div>
+                            <div class='artist-listeners'>Listeners: ".$listeners."</div>
+                            <form method='post' action='follow_artist.php'>
+                                <input type='hidden' name='artist_name' value='".$artistName."'>
+                                <input type='hidden' name='action' value='".($isFollowing ? "unfollow" : "follow")."'>
+                                <button type='submit' class='".($isFollowing ? "unfollow-button" : "follow-button")."'>".
+                                ($isFollowing ? "Unfollow" : "Follow")."</button>
+                            </form>
+                        </div>
+                      </div>";
+            }
+        } else {
+            echo "<p class='no-items'>No artists found.</p>";
+        }
+        ?>
+    </div>
+</div>
+
+</body>
+</html>
+
+<?php $conn->close(); ?> 

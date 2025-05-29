@@ -1,0 +1,476 @@
+<!-- Özer Efe Engin 20210702033 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>
+        <?php 
+        if ($result && $result->num_rows > 0) {
+            echo htmlspecialchars($artist['name']) . " - Artist Page";
+        } elseif (isset($searchResult) && $searchResult->num_rows > 0) {
+            echo "Artist Search: " . htmlspecialchars($artistName);
+        } else {
+            echo "Artist Not Found";
+        }
+        ?>
+    </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #121212;
+            --text-color: #f5f5f5;
+            --bg-color: #181818;
+            --card-color: #282828;
+            --hover-color: #333333;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+        
+        .artist-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 25px;
+            margin-bottom: 30px;
+            background-color: var(--card-color);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .artist-header img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .artist-info {
+            flex: 1;
+        }
+        
+        h1, h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+        
+        p {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .album, .song {
+            background-color: var(--card-color);
+            padding: 15px;
+            margin: 12px 0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .album:hover, .song:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-3px);
+        }
+        
+        .song-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .song-item:hover {
+            background-color: var(--hover-color);
+            transform: translateX(5px);
+        }
+        
+        .song-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 15px;
+        }
+        
+        .song-info {
+            flex: 1;
+        }
+        
+        .song-title {
+            font-weight: 600;
+            color: var(--text-color);
+            margin: 0;
+            font-size: 16px;
+        }
+        
+        .song-artist {
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 14px;
+            margin: 3px 0 0 0;
+        }
+        
+        .play-button {
+            margin-right: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+        }
+        
+        .play-button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+        
+        .song-duration {
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 14px;
+        }
+        
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: color 0.3s;
+        }
+        
+        a:hover {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        
+        .home-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 18px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .home-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .follow-button {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            margin-top: 15px;
+        }
+        
+        .follow-button:hover {
+            background-color: #2980b9;
+        }
+        
+        .unfollow-button {
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            margin-top: 15px;
+        }
+        
+        .unfollow-button:hover {
+            background-color: #c0392b;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            background-color: var(--card-color);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .section h2 {
+            margin-top: 0;
+        }
+        
+        .no-items {
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+        }
+        
+        /* Search Results Styles */
+        .artist-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .artist-card:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .artist-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+        
+        .artist-name {
+            color: var(--primary-color);
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .artist-details {
+            color: rgba(255,255,255,0.8);
+            margin: 3px 0;
+        }
+        
+        .artist-stats {
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            text-align: right;
+        }
+        
+        /* Not Found Styles */
+        .not-found-container {
+            max-width: 800px;
+            margin: 100px auto;
+            padding: 40px;
+            background-color: var(--card-color);
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .not-found-container h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        
+        .not-found-container p {
+            margin-bottom: 30px;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .not-found-container .home-button {
+            position: static;
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .not-found-container .home-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .search-info {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Search results header */
+        .search-results-header {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+    </style>
+    <script>
+        // Event listener for song play buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const playButtons = document.querySelectorAll('.play-button[data-song]');
+            playButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const songName = this.getAttribute('data-song');
+                    window.location.href = 'currentmusic.php?name=' + encodeURIComponent(songName);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+<?php if ($result && $result->num_rows > 0): ?>
+    <!-- ARTIST FOUND - Main Artist Page -->
+    <a href="homepage.php" class="home-button">🏠 Home</a>
+    
+    <div class="container">
+        <div class="artist-header">
+            <img src="<?php echo htmlspecialchars($artist['image']); ?>" alt="Artist Image">
+            <div class="artist-info">
+                <h1><?php echo htmlspecialchars($artist['name']); ?></h1>
+                <p><strong>Genre:</strong> <?php echo htmlspecialchars($artist['genre']); ?></p>
+                <p><strong>Country:</strong> <?php echo htmlspecialchars($artist['country_name']); ?></p>
+                <p><strong>Biography:</strong> <?php echo htmlspecialchars($artist['bio']); ?></p>
+                <p><strong>Listeners:</strong> <?php echo htmlspecialchars($artist['listeners']); ?></p>
+                
+                <?php if ($isLoggedIn): ?>
+                <div>
+                    <form method="post" action="follow_artist.php">
+                        <input type="hidden" name="artist_name" value="<?php echo htmlspecialchars($artist['name']); ?>">
+                        <input type="hidden" name="action" value="<?php echo $isFollowing ? 'unfollow' : 'follow'; ?>">
+                        <button type="submit" class="<?php echo $isFollowing ? 'unfollow-button' : 'follow-button'; ?>">
+                            <?php echo $isFollowing ? 'Unfollow' : 'Follow'; ?>
+                        </button>
+                    </form>
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Latest 5 Albums</h2>
+            <?php
+            if ($albumRes && $albumRes->num_rows > 0) {
+                while ($album = $albumRes->fetch_assoc()) {
+                    echo "<div class='album'>
+                            <a href='albumpage.php?name=" . urlencode($album['title']) . "'>
+                                🎵 " . htmlspecialchars($album['title']) . " (" . $album['release_date'] . ")
+                            </a>
+                          </div>";
+                }
+            } else {
+                echo "<p class='no-items'>No albums found.</p>";
+            }
+            ?>
+        </div>
+
+        <div class="section">
+            <h2>Top 5 Songs</h2>
+            <?php
+            if ($songRes && $songRes->num_rows > 0) {
+                while ($song = $songRes->fetch_assoc()) {
+                    echo "<div class='song-item'>
+                            <img src='" . htmlspecialchars($song['image']) . "' alt='Song Image' class='song-image'>
+                            <div class='song-info'>
+                                <p class='song-title'>" . htmlspecialchars($song['title']) . "</p>
+                                <p class='song-artist'>" . htmlspecialchars($artist['name']) . "</p>
+                            </div>
+                            <button class='play-button' data-song='" . htmlspecialchars($song['title']) . "'>▶️ Play</button>
+                            <div class='song-duration'>" . gmdate("i:s", $song['duration']) . "</div>
+                        </div>";
+                }
+            } else {
+                echo "<p class='no-items'>No songs found.</p>";
+            }
+            ?>
+        </div>
+    </div>
+
+<?php elseif (isset($searchResult) && $searchResult->num_rows > 0): ?>
+    <!-- SEARCH RESULTS -->
+    <a href="homepage.php" class="home-button">🏠 Home</a>
+    
+    <div class="container">
+        <h2 class="search-results-header">🔍 Search results for "<?php echo htmlspecialchars($artistName); ?>":</h2>
+        
+        <div>
+            <?php while ($searchRow = $searchResult->fetch_assoc()): ?>
+                <a href="artistpage.php?name=<?php echo urlencode($searchRow['name']); ?>" class="artist-card">
+                    <img src="<?php echo htmlspecialchars($searchRow['image']); ?>" alt="Artist Image">
+                    <div class="artist-info">
+                        <div class="artist-name"><?php echo htmlspecialchars($searchRow['name']); ?></div>
+                        <div class="artist-details">Genre: <?php echo htmlspecialchars($searchRow['genre']); ?></div>
+                        <div class="artist-details">Country: <?php echo htmlspecialchars($searchRow['country_name']); ?></div>
+                    </div>
+                    <div class="artist-stats">
+                        <div><?php echo number_format($searchRow['listeners']); ?> listeners</div>
+                    </div>
+                </a>
+            <?php endwhile; ?>
+        </div>
+    </div>
+
+<?php else: ?>
+    <!-- NOT FOUND -->
+    <div class="not-found-container">
+        <h2>🔍 Artist Not Found</h2>
+        
+        <?php if (!empty($artistName)): ?>
+            <div class="search-info">
+                Searched for <strong>"<?php echo htmlspecialchars($artistName); ?>"</strong>
+            </div>
+            <p>The artist you are looking for is not in our system.<br>
+            You can try different search terms or return to the home page.</p>
+        <?php else: ?>
+            <p>Please enter an artist name to search.</p>
+        <?php endif; ?>
+        
+        <a href="homepage.php" class="home-button">🏠 Return to Home</a>
+    </div>
+
+<?php endif; ?>
+
+</body>
+</html>
+
+<?php $conn->close(); ?> 

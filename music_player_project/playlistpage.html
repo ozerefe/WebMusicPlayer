@@ -1,0 +1,485 @@
+<!-- Özer Efe Engin 20210702033 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Playlist - <?php echo htmlspecialchars($playlistName); ?></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #121212;
+            --text-color: #f5f5f5;
+            --bg-color: #181818;
+            --card-color: #282828;
+            --hover-color: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: var(--card-color);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .playlist-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(25, 20, 20, 0.3));
+            border-radius: 12px;
+        }
+        
+        .playlist-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-right: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .playlist-info {
+            flex: 1;
+        }
+        
+        .playlist-info h1 {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .playlist-info p {
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 16px;
+        }
+        
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+        }
+        
+        .search-bar input:focus {
+            outline: 1px solid var(--primary-color);
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .search-bar button {
+            padding: 12px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .search-bar button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .search-results {
+            margin-bottom: 30px;
+        }
+        
+        .song-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 12px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .song-item:hover {
+            background-color: var(--hover-color);
+            transform: translateX(5px);
+        }
+        
+        .song-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        
+        .song-info {
+            flex: 1;
+            margin-right: 15px;
+        }
+        
+        .song-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+        
+        .song-artist {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 3px;
+        }
+        
+        .song-country {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .play-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            margin-right: 10px;
+        }
+        
+        .play-button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+        
+        .add-button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            margin-right: 10px;
+        }
+        
+        .add-button:hover {
+            background-color: #219a52;
+            transform: scale(1.05);
+        }
+        
+        .remove-button {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin-left: 10px;
+        }
+        
+        .remove-button:hover {
+            background-color: rgba(231, 76, 60, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .song-duration {
+            margin-left: 15px;
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 14px;
+        }
+        
+        .home-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .home-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .edit-button {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 0 5px;
+            vertical-align: middle;
+        }
+        
+        .edit-save-button {
+            padding: 8px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .edit-save-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .edit-cancel-button {
+            padding: 8px 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-color);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .edit-cancel-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .edit-mode-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .edit-mode-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: rotate(15deg);
+        }
+        
+        .delete-button {
+            padding: 8px 15px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .delete-button:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 6px;
+        }
+        
+        h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        input[type="text"], textarea {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        textarea:focus, input:focus {
+            outline: 1px solid var(--primary-color);
+        }
+    </style>
+    <script>
+        function toggleEditMode() {
+            const viewMode = document.getElementById('view-mode');
+            const editMode = document.getElementById('edit-mode');
+            
+            if (viewMode.style.display !== 'none') {
+                viewMode.style.display = 'none';
+                editMode.style.display = 'block';
+            } else {
+                viewMode.style.display = 'block';
+                editMode.style.display = 'none';
+            }
+        }
+        
+        // Song play buttons event listener
+        document.addEventListener('DOMContentLoaded', function() {
+            const playButtons = document.querySelectorAll('.play-button[data-song]');
+            playButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const songName = this.getAttribute('data-song');
+                    window.location.href = 'currentmusic.php?name=' + encodeURIComponent(songName);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <a href="homepage.php" class="home-button">🏠 Home</a>
+    
+    <div class="container">
+        <div class="playlist-header">
+            <img src="<?php echo htmlspecialchars($playlistImage); ?>" alt="Playlist Image" class="playlist-image">
+            
+            <!-- View Mode -->
+            <div id="view-mode" class="playlist-info">
+                <h1><?php echo htmlspecialchars($playlistName); ?></h1>
+                <p><?php echo htmlspecialchars($playlistDesc); ?></p>
+                <p><?php echo ($result && $result->num_rows) ? $result->num_rows . ' songs' : 'No songs'; ?></p>
+            </div>
+            
+            <!-- Edit Mode -->
+            <div id="edit-mode" class="playlist-info" style="display: none;">
+                <form method="post" action="">
+                    <div style="margin-bottom: 10px;">
+                        <label for="new_title" style="display: block; margin-bottom: 5px; font-weight: bold;">Playlist Name:</label>
+                        <input type="text" id="new_title" name="new_title" value="<?php echo htmlspecialchars($playlistName); ?>" style="width: 100%; padding: 8px; border-radius: 8px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="new_description" style="display: block; margin-bottom: 5px; font-weight: bold;">Description:</label>
+                        <textarea id="new_description" name="new_description" style="width: 100%; padding: 8px; border-radius: 8px; min-height: 80px;"><?php echo htmlspecialchars($playlistDesc); ?></textarea>
+                    </div>
+                    <div>
+                        <button type="submit" name="save_playlist_info" class="edit-save-button">Save</button>
+                        <button type="button" onclick="toggleEditMode()" class="edit-cancel-button">Cancel</button>
+                    </div>
+                </form>
+                
+                <!-- Delete Playlist Button -->
+                <div style="margin-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 15px;">
+                    <form method="post" action="" onsubmit="return confirm('Are you sure you want to delete this playlist? This action cannot be undone!');">
+                        <button type="submit" name="delete_playlist" class="delete-button">Delete Playlist</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Edit Button -->
+            <button onclick="toggleEditMode()" class="edit-mode-button" title="Edit playlist information">✏️</button>
+        </div>
+        
+        <?php echo $message; ?>
+        
+        <!-- Song Search Form -->
+        <div class="search-bar">
+            <form method="get" action="" style="display:flex; width:100%;">
+                <input type="hidden" name="name" value="<?php echo htmlspecialchars($playlistName); ?>">
+                <input type="text" name="song_search" placeholder="Search for songs to add to playlist..." value="<?php echo isset($_GET['song_search']) ? htmlspecialchars($_GET['song_search']) : ''; ?>">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        
+        <!-- Search Results -->
+        <?php if (!empty($searchResults)): ?>
+            <h3>Search Results</h3>
+            <div class="search-results">
+                <?php foreach ($searchResults as $song): ?>
+                    <div class="song-item">
+                        <img src="<?php echo htmlspecialchars($song['image']); ?>" alt="Song Image" class="song-image">
+                        <div class="song-info">
+                            <p class="song-title"><?php echo htmlspecialchars($song['song_title']); ?></p>
+                            <p class="song-artist"><?php echo htmlspecialchars($song['artist_name']); ?></p>
+                            <p class="song-country"><?php echo htmlspecialchars($song['country_name']); ?> </p>
+                        </div>
+                        <button class="play-button" data-song="<?php echo htmlspecialchars($song['song_title']); ?>">▶️ Play</button>
+                        <form method="post" action="">
+                            <input type="hidden" name="song_id" value="<?php echo $song['song_id']; ?>">
+                            <button type="submit" name="add_song" class="add-button">+ Add</button>
+                        </form>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php elseif (isset($_GET['song_search']) && !empty($_GET['song_search'])): ?>
+            <p>No search results found.</p>
+        <?php endif; ?>
+        
+        <!-- Playlist Songs -->
+        <h3>Playlist Songs</h3>
+        <?php 
+        if ($result && $result->num_rows > 0): ?>
+            <div class="search-results">
+                <?php while ($row = $result->fetch_assoc()): ?>
+                    <div class="song-item">
+                        <img src="<?php echo htmlspecialchars($row['image']); ?>" alt="Song Image" class="song-image">
+                        <div class="song-info">
+                            <p class="song-title"><?php echo htmlspecialchars($row['title']); ?></p>
+                            <p class="song-artist"><?php echo htmlspecialchars($row['artist_name']); ?></p>
+                            <p class="song-country"><?php echo htmlspecialchars($row['country_name']); ?> </p>
+                        </div>
+                        <button class="play-button" data-song="<?php echo htmlspecialchars($row['title']); ?>">▶️ Play</button>
+                        <div class="song-duration"><?php echo gmdate("i:s", $row['duration']); ?></div>
+                        <form method="post" action="" style="margin-left: 10px;" onsubmit="return confirm('Are you sure you want to remove this song from the playlist?');">
+                            <input type="hidden" name="song_id" value="<?php echo $row['song_id']; ?>">
+                            <button type="submit" name="remove_song" class="remove-button" title="Remove song from playlist">🗑️</button>
+                        </form>
+                    </div>
+                <?php endwhile; ?>
+            </div>
+        <?php else: ?>
+            <p>This playlist doesn't have any songs yet.</p>
+        <?php endif; ?>
+    </div>
+</body>
+</html>
+
+<?php $conn->close(); ?> 

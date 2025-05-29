@@ -1,0 +1,91 @@
+<!-- Özer Efe Engin 20210702033 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Music Player - Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to bottom right, #2980b9, #020406);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 500px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .container h1 {
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+      color: #333;
+    }
+
+    .container form {
+      margin-bottom: 15px;
+    }
+
+    .container button {
+      width: 100%;
+      padding: 14px;
+      background-color: #2980b9;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .container button.reset {
+      background-color: #e53e3e; 
+    }
+
+    .container button.login {
+      background-color: #1DB954;
+    }
+
+    .container button.reset:hover {
+      background-color: #cc2f2f;
+    }
+
+    .container button.login:hover {
+      background-color: #1AA34A;
+    }
+
+    .container button:hover:not(.reset):not(.login) {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to Özer Efe Engin's Music Player</h1>
+
+    <form action="install.php" method="post">
+      <button type="submit">Initialize Database</button>
+    </form>
+
+    <form action="reset_database.php" method="post">
+      <button type="submit" class="reset">Reset Database</button>
+    </form>
+
+    <form action="login.html" method="get">
+      <button type="submit" class="login">Go to Login</button>
+    </form>
+  </div>
+</body>
+</html>

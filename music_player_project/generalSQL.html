@@ -1,0 +1,331 @@
+<!-- Özer Efe Engin 20210702033 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>General SQL - Statistics and Queries</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #121212;
+            --text-color: #f5f5f5;
+            --bg-color: #181818;
+            --card-color: #282828;
+            --hover-color: #333333;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #3498db, #191414);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .main-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        .card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .home-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .home-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        h1, h2, h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .query-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .query-button {
+            background-color: var(--card-color);
+            color: var(--text-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .query-button:hover, .query-button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .sql-form {
+            margin-bottom: 20px;
+        }
+        
+        .sql-input {
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid #444;
+            color: white;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin-bottom: 10px;
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .sql-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .sql-input:focus {
+            outline: none;
+            border: 1px solid var(--primary-color);
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        
+        .submit-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .submit-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: var(--card-color);
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+        
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+        }
+        
+        tr:hover {
+            background-color: var(--hover-color);
+        }
+        
+        .error {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .success {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #2ecc71;
+        }
+        
+        .warning {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: #f39c12;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .result-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 0 10px;
+            }
+            
+            .query-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+            
+            table {
+                font-size: 14px;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+            }
+        }
+        
+        /* Scrollbar styling */
+        .sql-input::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .sql-input::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sql-input::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 6px;
+        }
+        
+        /* Animation for cards */
+        .card {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>General SQL - Statistics and Queries</h1>
+        <a href="homepage.php" class="home-button">🏠 Home</a>
+    </div>
+
+    <div class="main-container">
+        <!-- Ready Queries -->
+        <div class="card">
+            <h2>Ready Queries</h2>
+            <div class="query-options">
+                <?php foreach ($defaultQueries as $queryName => $querySql): ?>
+                    <a href="?query=<?php echo urlencode($queryName); ?>" 
+                       class="query-button <?php echo ($selectedQuery == $queryName) ? 'active' : ''; ?>">
+                        <?php echo htmlspecialchars($queryName); ?>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+        <!-- Custom SQL Query -->
+        <div class="card">
+            <h2>Custom SQL Query</h2>
+            <form method="post" action="" class="sql-form">
+                <textarea name="custom_sql" placeholder="Write your SQL query here... (Example: SELECT * FROM USERS LIMIT 5)" class="sql-input"><?php echo htmlspecialchars($customSql); ?></textarea>
+                <button type="submit" class="submit-button">Execute Query</button>
+            </form>
+            <?php echo $executeStatus; ?>
+        </div>
+
+        <!-- Results -->
+        <?php if (!empty($results)): ?>
+        <div class="card">
+            <h2>Query Results</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <?php foreach ($columns as $column): ?>
+                            <th><?php echo htmlspecialchars($column); ?></th>
+                        <?php endforeach; ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($results as $row): ?>
+                        <tr>
+                            <?php foreach ($columns as $column): ?>
+                                <td>
+                                    <?php 
+                                    // If it's an image field and contains URL, show as image
+                                    if ($column == 'image' && isset($row[$column]) && 
+                                        (strpos($row[$column], 'http') === 0 || strpos($row[$column], 'https') === 0)): ?>
+                                        <img src="<?php echo htmlspecialchars($row[$column]); ?>" alt="Image" class="result-image">
+                                    <?php else: ?>
+                                        <?php echo htmlspecialchars($row[$column] ?? ''); ?>
+                                    <?php endif; ?>
+                                </td>
+                            <?php endforeach; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php endif; ?>
+    </div>
+</body>
+</html>
+
+<?php $conn->close(); ?> 
