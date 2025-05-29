@@ -51,6 +51,6 @@ A full-featured music streaming web application built with PHP, HTML, CSS, and J
 
 ## 👨‍💻 Developer
 
-Created by Özer Efe Engin 
+Özer Efe Engin 
 ---
 
